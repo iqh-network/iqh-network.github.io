@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Google API Integration</title>
+</head>
+<body>
+    <h1>Gemini Google API Example</h1>
+    
+    <textarea id="text-input" rows="4" cols="50" placeholder="Enter text for analysis"></textarea><br>
+    
+    <button id="analyze-button">Analyze</button>
+    
+    <h2>Response:</h2>
+    <pre id="response-output"></pre>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        // Initialize the Google API client
+        function initApiClient() {
+            gapi.client.init({
+                'apiKey': 'AIzaSyDFiCopvMFxSYBuMax_U9upVP6W1EnLfLI'  // Replace with your actual API key
+            }).then(function() {
+                console.log("API Client Initialized");
+            }, function(error) {
+                console.error("Error initializing API client", error);
+            });
+        }
+
+        // This function is triggered when the Analyze button is clicked
+        document.getElementById('analyze-button').onclick = function() {
+            const text = document.getElementById('text-input').value;
+            
+            if (!text) {
+                alert("Please enter some text!");
+                return;
+            }
+
+            // Call Google API here (assuming you have access to it)
+            // This is just a template. Make sure you set up API keys and OAuth authentication for the Gemini API.
+            
+            const endpoint = 'https://gemini.googleapis.com/v1/analyze'; // Replace with correct endpoint if necessary
+            
+            const requestData = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer YOUR_ACCESS_TOKEN`  // Replace with OAuth token or API key if needed
+                },
+                body: JSON.stringify({
+                    "inputText": text
+                })
+            };
+
+            // Make the API call using fetch
+            fetch(endpoint, requestData)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle API response here
+                    console.log(data);
+                    document.getElementById('response-output').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('response-output').textContent = 'Error: ' + error.message;
+                });
+        };
+
+        // Load the API client and initialize it
+        gapi.load('client', initApiClient);
+    </script>
+</body>
+</html>
